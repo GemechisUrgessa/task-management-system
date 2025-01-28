@@ -1,0 +1,39 @@
+version: '3.8'  # Can remove this line if you want (as per the warning)
+
+services:
+  backend:
+    build: 
+      context: ./backend
+      dockerfile: Dockerfile
+    ports:
+      - "5001:5001"
+    environment:
+      - DB_HOST=db  # matches the postgres service name
+      - DB_PORT=5432
+      - DB_USER=app_user
+      - DB_PASSWORD=app_password
+      - DB_NAME=task_management
+      -  NODE_ENV=production
+    depends_on:
+      - db  # ensures db starts first
+
+  frontend:
+    build: ./frontend
+    ports:
+      - "5173:5173"
+    depends_on:
+      - backend
+
+  db:
+    image: postgres:15-alpine
+    environment:
+      - POSTGRES_USER=app_user
+      - POSTGRES_PASSWORD=app_password
+      - POSTGRES_DB=task_management
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+volumes:
+  postgres_data:
