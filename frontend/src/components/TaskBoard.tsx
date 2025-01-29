@@ -56,37 +56,45 @@ const TaskBoard: React.FC = () => {
   };
 
   return (
-    <div className="grid grid-cols-3 gap-6 p-6">
+    <div className="grid grid-cols-1 md:grid-cols-3 gap-6 p-6">
       {Object.entries(columns).map(([status, label]) => (
         <div
           key={status}
-          className="p-4 bg-gray-100 rounded-lg relative shadow-md"
+          className={`p-4 rounded-lg relative shadow-md border ${
+            status === "pending"
+              ? "border-yellow-400 bg-yellow-50"
+              : status === "in progress"
+              ? "border-blue-400 bg-blue-50"
+              : "border-green-400 bg-green-50"
+          }`}
         >
           {/* Column Header */}
           <div className="flex justify-between items-center mb-4">
-            <h2 className="text-lg font-bold">{label}</h2>
+            <h2 className="text-lg font-bold text-gray-800">{label}</h2>
             {status === "pending" && (
               <button
                 onClick={handleAddTask}
-                className="bg-blue-600 text-white px-3 py-1 rounded-md shadow-md hover:bg-blue-700"
+                className="bg-blue-600 text-white px-4 py-2 rounded-md shadow-md hover:bg-blue-700 transition transform hover:scale-105"
               >
-                +
+                + New Task
               </button>
             )}
           </div>
 
           {/* Task Cards */}
-          {tasks
-            .filter((task) => task.status === status)
-            .map((task) => (
-              <TaskCard
-                key={task.id}
-                task={task}
-                onEdit={handleEditTask}
-                onSubTaskEdit={handleEditSubTask} // ✅ Enable Subtask Editing
-                onAddSubtask={handleAddSubtask} // ✅ Enable Subtask Creation
-              />
-            ))}
+          <div className="space-y-4">
+            {tasks
+              .filter((task) => task.status === status)
+              .map((task) => (
+                <TaskCard
+                  key={task.id}
+                  task={task}
+                  onEdit={handleEditTask}
+                  onSubTaskEdit={handleEditSubTask}
+                  onAddSubtask={handleAddSubtask}
+                />
+              ))}
+          </div>
         </div>
       ))}
 
@@ -102,7 +110,7 @@ const TaskBoard: React.FC = () => {
         isOpen={isSubtaskModalOpen}
         onClose={() => setIsSubtaskModalOpen(false)}
         parentTask={parentTask}
-        editingSubtask={subTaskEditing} // ✅ Pass Editing Subtask
+        editingSubtask={subTaskEditing}
       />
     </div>
   );

@@ -153,7 +153,7 @@ const CreateTaskModal: React.FC<CreateTaskModalProps> = ({
 
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-gray-200 bg-opacity-20 z-50">
-      <div className="bg-white rounded-md p-6 w-full max-w-md">
+      <div className="bg-white rounded-md p-6 w-full max-w-md max-h-full overflow-y-auto">
         <h2 className="text-xl font-bold mb-4">
           {editingTask ? "Edit Task" : "Create New Task"}
         </h2>
@@ -166,6 +166,7 @@ const CreateTaskModal: React.FC<CreateTaskModalProps> = ({
         )}
 
         {/* Title Input */}
+        <label className="block mb-1 font-semibold">Title</label>
         <input
           className={`border w-full p-2 rounded-md ${
             error.title ? "border-red-500" : "border-gray-300"
@@ -179,6 +180,7 @@ const CreateTaskModal: React.FC<CreateTaskModalProps> = ({
         )}
 
         {/* Description */}
+        <label className="block mt-4 mb-1 font-semibold">Description</label>
         <textarea
           className="border w-full p-2 mb-4 rounded-md"
           value={description}
@@ -187,6 +189,7 @@ const CreateTaskModal: React.FC<CreateTaskModalProps> = ({
         />
 
         {/* Priority */}
+        <label className="block mb-1 font-semibold">Priority</label>
         <select
           className="border w-full p-2 rounded-md"
           value={priority}
@@ -200,6 +203,7 @@ const CreateTaskModal: React.FC<CreateTaskModalProps> = ({
         </select>
 
         {/* Status */}
+        <label className="block mt-4 mb-1 font-semibold">Status</label>
         <select
           className="border w-full p-2 rounded-md"
           value={status}
@@ -213,6 +217,7 @@ const CreateTaskModal: React.FC<CreateTaskModalProps> = ({
         </select>
 
         {/* Due Date */}
+        <label className="block mt-4 mb-1 font-semibold">Due Date</label>
         <input
           type="date"
           className="border w-full p-2 rounded-md"
@@ -221,9 +226,7 @@ const CreateTaskModal: React.FC<CreateTaskModalProps> = ({
         />
 
         {/* File Upload Section */}
-        {/* Existing Files, New File Upload UI, and Actions are included */}
-        {/* File Upload Section */}
-        <h3 className="text-md font-semibold mb-2">Attachments</h3>
+        <h3 className="text-md font-semibold mt-4 mb-2">Attachments</h3>
 
         {/* Existing Files */}
         {existingFiles.length > 0 && (
@@ -279,16 +282,35 @@ const CreateTaskModal: React.FC<CreateTaskModalProps> = ({
           </ul>
         )}
 
-        <button
-          onClick={handleSubmit}
-          className="bg-blue-600 text-white px-4 py-2 rounded-md mt-4 w-full"
-        >
-          {loading
-            ? "Processing..."
-            : editingTask
-            ? "Update Task"
-            : "Create Task"}
-        </button>
+        <div className="flex justify-between">
+          <button
+            onClick={() => {
+              onClose();
+              setTitle("");
+              setDescription("");
+              setPriority("medium");
+              setStatus("pending");
+              setDueDate("");
+              setNewFiles([]);
+              setExistingFiles([]);
+              setError({});
+              setSuccessMessage(null);
+            }}
+            className="bg-red-600 text-white px-4 py-2 rounded-md mt-4"
+          >
+            Cancel
+          </button>
+          <button
+            onClick={handleSubmit}
+            className="bg-blue-600 text-white px-4 py-2 rounded-md mt-4"
+          >
+            {loading
+              ? "Processing..."
+              : editingTask
+              ? "Update Task"
+              : "Create Task"}
+          </button>
+        </div>
       </div>
     </div>
   );

@@ -96,6 +96,7 @@ const CreateSubtaskModal: React.FC<CreateSubtaskModalProps> = ({
           {editingSubtask ? "Edit Subtask" : "Create Subtask"}
         </h2>
 
+        <label className="block mb-2 font-medium">Subtask Title</label>
         <input
           className="border w-full p-2 mb-4 rounded-md"
           value={title}
@@ -103,6 +104,7 @@ const CreateSubtaskModal: React.FC<CreateSubtaskModalProps> = ({
           placeholder="Subtask Title"
         />
 
+        <label className="block mb-2 font-medium">Due Date</label>
         <input
           type="date"
           className="border w-full p-2 mb-4 rounded-md"
@@ -110,6 +112,7 @@ const CreateSubtaskModal: React.FC<CreateSubtaskModalProps> = ({
           onChange={(e) => setDueDate(e.target.value)}
         />
 
+        <label className="block mb-2 font-medium">Status</label>
         <select
           className="border w-full p-2 mb-4 rounded-md"
           value={status}
@@ -124,7 +127,7 @@ const CreateSubtaskModal: React.FC<CreateSubtaskModalProps> = ({
 
         <div className="flex justify-end space-x-2">
           <button
-            className="bg-gray-300 px-4 py-2 rounded-md"
+            className="bg-red-500 px-4 py-2 rounded-md"
             onClick={onClose}
             disabled={loading}
           >

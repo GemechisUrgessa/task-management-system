@@ -158,33 +158,42 @@ const TaskCard: React.FC<TaskCardProps> = ({
   };
 
   return (
-    <div className="bg-white shadow-md rounded-lg p-5 mb-4 border border-gray-200 transition hover:shadow-lg">
+    <div
+      className={`bg-white shadow-lg rounded-lg p-6 border-2 transition transform hover:scale-[1.02] hover:shadow-xl duration-300 ${
+        status === "pending"
+          ? "border-yellow-400"
+          : status === "in progress"
+          ? "border-blue-400"
+          : "border-green-400"
+      }`}
+    >
       {/* Title & Actions */}
       <div className="flex justify-between items-center mb-3">
-        <h2 className="text-lg font-bold text-gray-800">{task.title}</h2>
+        <h2 className="text-xl font-semibold text-gray-800">{task.title}</h2>
         <div className="flex space-x-2">
           <button
-            className="text-blue-600 hover:text-blue-800"
+            className="p-2 rounded-full bg-blue-100 hover:bg-blue-200 transition"
             onClick={() => onEdit(task)}
           >
-            <FaEdit />
+            <FaEdit className="text-blue-600" />
           </button>
           <button
-            className="text-red-600 hover:text-red-800"
+            className="p-2 rounded-full bg-red-100 hover:bg-red-200 transition"
             onClick={handleDelete}
             disabled={loading}
           >
-            {loading ? "..." : <FaTrash />}
+            {loading ? "..." : <FaTrash className="text-red-600" />}
           </button>
         </div>
       </div>
 
       {/* Description */}
-      <p className="text-gray-600">{task.description}</p>
-      {/* task Due date */}
-      <div className="mt-2">
-        <label className="text-sm font-semibold">Due Date:</label>
-        <span className="ml-2 text-gray-600">
+      <p className="text-gray-600 text-sm mb-3">{task.description}</p>
+
+      {/* Due Date */}
+      <div className="text-sm font-medium text-gray-700 bg-gray-100 p-2 rounded-md inline-block">
+        Due:{" "}
+        <span className="text-gray-900 font-semibold">
           {new Date(task.due_date).toLocaleDateString("en-US", {
             month: "short",
             day: "numeric",
@@ -194,11 +203,11 @@ const TaskCard: React.FC<TaskCardProps> = ({
       </div>
 
       {/* Priority & Status */}
-      <div className="flex items-center justify-between mt-2">
-        <div>
+      <div className="flex items-center justify-between mt-4 md:flex-wrap">
+        <div className="flex flex-col">
           <label className="text-sm font-semibold">Priority:</label>
           <select
-            className="ml-2 p-1 border rounded-md bg-gray-50"
+            className="px-2 py-1 border rounded-md bg-white text-gray-700 focus:ring-2 focus:ring-blue-300"
             value={priority}
             onChange={(e) =>
               handlePriorityChange(e.target.value as "low" | "medium" | "high")
@@ -211,10 +220,10 @@ const TaskCard: React.FC<TaskCardProps> = ({
           </select>
         </div>
 
-        <div>
+        <div className="flex flex-col">
           <label className="text-sm font-semibold">Status:</label>
           <select
-            className="ml-2 p-1 border rounded-md bg-gray-50"
+            className="px-2 py-1 border rounded-md bg-white text-gray-700 focus:ring-2 focus:ring-blue-300"
             value={status}
             onChange={(e) =>
               handleStatusChange(
@@ -232,30 +241,28 @@ const TaskCard: React.FC<TaskCardProps> = ({
 
       {/* Files (Preview & Download) */}
       {task.files && task.files.length > 0 && (
-        <div className="mt-3">
-          <h3 className="text-sm font-semibold mb-1">Files:</h3>
-          <ul className="text-sm text-gray-700 pl-4">
+        <div className="mt-4">
+          <h3 className="text-sm font-semibold mb-2">Files:</h3>
+          <ul className="text-sm text-gray-700">
             {task.files.map((file) => (
-              <li key={file.id} className="flex justify-between items-center">
+              <li
+                key={file.id}
+                className="flex justify-between items-center p-2 bg-gray-100 rounded-md mb-1"
+              >
                 <a
                   href={file.file_url}
-                  target={
-                    file.file_type.startsWith("image/") ||
-                    file.file_type === "application/pdf"
-                      ? "_blank"
-                      : "_self"
-                  }
+                  target="_blank"
                   rel="noopener noreferrer"
-                  className="text-blue-500 hover:underline"
+                  className="text-blue-600 hover:underline truncate"
                 >
                   {file.public_id.split("/").pop()?.slice(0, 20) ?? ""}
                 </a>
-                <a
+                <button
                   onClick={() => handleDownload(file.file_url, file.public_id)}
-                  className="text-green-600 hover:text-green-800 ml-2 cursor-pointer"
+                  className="text-green-600 hover:text-green-800 ml-2"
                 >
                   <FaDownload />
-                </a>
+                </button>
               </li>
             ))}
           </ul>
@@ -263,33 +270,61 @@ const TaskCard: React.FC<TaskCardProps> = ({
       )}
 
       {/* Subtasks */}
-      <div className="mt-3">
-        <div className="flex justify-between items-center mb-2">
-          <h3 className="text-sm font-semibold">Subtasks:</h3>
+      <div className="mt-6">
+        <div className="flex justify-between items-center mb-3">
+          <h3 className="text-sm font-semibold text-gray-700">Subtasks:</h3>
           <button
-            className="text-green-600 hover:text-green-800 flex items-center"
+            className="flex items-center px-3 py-1 bg-green-600 text-white rounded-md shadow-sm hover:bg-green-700 transition"
             onClick={() => onAddSubtask(task)}
           >
             <FaPlus className="mr-1" /> Add Subtask
           </button>
         </div>
-        <div className="space-y-2">
+
+        <div className="space-y-3">
           {task?.subtasks?.map((subtask) => (
             <div
               key={subtask.id}
-              className="flex flex-wrap justify-between items-center text-sm p-2 border rounded-md bg-gray-50"
+              className={`p-3 border-2 rounded-lg bg-gray-100 shadow-sm transition flex  space-y-2 sm:space-y-0 flex-col items-start ${
+                subtask.status === "pending"
+                  ? "border-yellow-600"
+                  : subtask.status === "in progress"
+                  ? "border-blue-600"
+                  : "border-green-600"
+              }`}
             >
-              <span className="w-full sm:w-auto">{subtask.title}</span>
-              <div className="flex flex-wrap items-center space-x-2 mt-2 sm:mt-0">
-                <span className="text-gray-600">
-                  {new Date(task.due_date).toLocaleDateString("en-US", {
+              {/* Subtask Title & Due Date */}
+              <div className="flex space-x-2 justify-between w-[100%]">
+                <span className="font-medium text-gray-800 truncate">
+                  {subtask.title}
+                </span>
+                <span className="text-xs text-gray-500">
+                  {new Date(subtask.due_date).toLocaleDateString("en-US", {
                     month: "short",
                     day: "numeric",
                     year: "numeric",
                   })}
                 </span>
+                <div className="flex items-center gap-2">
+                  <button
+                    className="p-2 rounded-full bg-blue-100 hover:bg-blue-200 transition"
+                    onClick={() => onSubTaskEdit(subtask, task)}
+                  >
+                    <FaEdit className="text-blue-600" />
+                  </button>
+                  <button
+                    className="p-2 rounded-full bg-red-100 hover:bg-red-200 transition"
+                    onClick={() => handleDeleteSubtask(subtask.id)}
+                  >
+                    <FaTrash className="text-red-600" />
+                  </button>
+                </div>
+              </div>
+
+              {/* Priority & Status Selectors */}
+              <div className="flex flex-wrap items-center gap-2">
                 <select
-                  className="p-1 border rounded-md bg-white"
+                  className="px-2 py-1 border rounded-md bg-white text-gray-700 focus:ring-2 focus:ring-blue-300"
                   value={subtask.priority}
                   onChange={(e) =>
                     handleSubtaskPriorityChange(
@@ -302,8 +337,9 @@ const TaskCard: React.FC<TaskCardProps> = ({
                   <option value="medium">Medium</option>
                   <option value="high">High</option>
                 </select>
+
                 <select
-                  className="p-1 border rounded-md bg-white"
+                  className="px-2 py-1 border rounded-md bg-white text-gray-700 focus:ring-2 focus:ring-blue-300"
                   value={subtask.status}
                   onChange={(e) =>
                     handleSubtaskStatusChange(
@@ -316,22 +352,17 @@ const TaskCard: React.FC<TaskCardProps> = ({
                   <option value="in progress">In Progress</option>
                   <option value="completed">Completed</option>
                 </select>
-                <button onClick={() => onSubTaskEdit(subtask, task)}>
-                  <FaEdit className="text-blue-600 hover:text-blue-800" />
-                </button>
-                <button onClick={() => handleDeleteSubtask(subtask.id)}>
-                  <FaTrash className="text-red-600 hover:text-red-800" />
-                </button>
               </div>
+
+              {/* Edit & Delete Buttons */}
             </div>
           ))}
         </div>
       </div>
 
       {/* Error Message */}
-      {error && <p className="text-red-500 text-sm mt-2">{error}</p>}
+      {error && <p className="text-red-500 text-sm mt-3">{error}</p>}
     </div>
   );
 };
-
 export default TaskCard;

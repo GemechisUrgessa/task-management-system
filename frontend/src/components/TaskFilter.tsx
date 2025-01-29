@@ -47,76 +47,68 @@ const TaskFilter: React.FC = () => {
   };
 
   return (
-    <div className="bg-white shadow-md rounded-md p-4 mb-4 flex flex-wrap gap-4 items-center justify-between">
+    <div className="bg-white shadow-lg rounded-lg p-6 mb-6 flex flex-wrap gap-4 items-center justify-between border border-gray-200 transition hover:shadow-xl">
       {/* Status Filter */}
-      <div>
-        <label className="block text-sm font-semibold text-gray-700">
-          Status
-        </label>
+      <div className="flex flex-col w-1/5 min-w-[150px]">
+        <label className="text-sm font-semibold text-gray-700">Status</label>
         <select
-          className="border p-2 rounded-md w-full"
+          className="border p-2 rounded-md bg-gray-50 focus:ring-2 focus:ring-blue-300 focus:outline-none transition"
           value={status || ""}
           onChange={(e) => setStatus(e.target.value || undefined)}
         >
           <option value="">All</option>
-          <option value="pending">To Do</option>
-          <option value="in progress">In Progress</option>
-          <option value="completed">Done</option>
+          <option value="pending">🟡 To Do</option>
+          <option value="in progress">🔵 In Progress</option>
+          <option value="completed">🟢 Done</option>
         </select>
       </div>
 
       {/* Priority Filter */}
-      <div>
-        <label className="block text-sm font-semibold text-gray-700">
-          Priority
-        </label>
+      <div className="flex flex-col w-1/5 min-w-[150px]">
+        <label className="text-sm font-semibold text-gray-700">Priority</label>
         <select
-          className="border p-2 rounded-md w-full"
+          className="border p-2 rounded-md bg-gray-50 focus:ring-2 focus:ring-yellow-300 focus:outline-none transition"
           value={priority || ""}
           onChange={(e) => setPriority(e.target.value || undefined)}
         >
           <option value="">All</option>
-          <option value="low">Low</option>
-          <option value="medium">Medium</option>
-          <option value="high">High</option>
+          <option value="low">🟢 Low</option>
+          <option value="medium">🟠 Medium</option>
+          <option value="high">🔴 High</option>
         </select>
       </div>
 
       {/* Start Date Filter */}
-      <div>
-        <label className="block text-sm font-semibold text-gray-700">
+      <div className="flex flex-col w-1/5 min-w-[150px]">
+        <label className="text-sm font-semibold text-gray-700">
           Start Date
         </label>
         <input
           type="date"
-          className="border p-2 rounded-md w-full"
+          className="border p-2 rounded-md bg-gray-50 focus:ring-2 focus:ring-blue-300 focus:outline-none transition"
           value={startDate || ""}
           onChange={(e) => setStartDate(e.target.value || undefined)}
         />
       </div>
 
       {/* End Date Filter */}
-      <div>
-        <label className="block text-sm font-semibold text-gray-700">
-          End Date
-        </label>
+      <div className="flex flex-col w-1/5 min-w-[150px]">
+        <label className="text-sm font-semibold text-gray-700">End Date</label>
         <input
           type="date"
-          className="border p-2 rounded-md w-full"
+          className="border p-2 rounded-md bg-gray-50 focus:ring-2 focus:ring-blue-300 focus:outline-none transition"
           value={endDate || ""}
           onChange={(e) => setEndDate(e.target.value || undefined)}
         />
       </div>
 
       {/* Search Bar */}
-      <div className="flex-grow">
-        <label className="block text-sm font-semibold text-gray-700">
-          Search
-        </label>
+      <div className="flex-grow min-w-[200px]">
+        <label className="text-sm font-semibold text-gray-700">Search</label>
         <input
           type="text"
-          className="border p-2 rounded-md w-full"
-          placeholder="Search tasks..."
+          className="border p-2 rounded-md w-full bg-gray-50 focus:ring-2 focus:ring-blue-300 focus:outline-none transition shadow-sm placeholder-gray-400"
+          placeholder="🔍 Search tasks..."
           value={search}
           onChange={(e) => setSearch(e.target.value)}
         />
@@ -125,9 +117,9 @@ const TaskFilter: React.FC = () => {
       {/* Reset Button */}
       <button
         onClick={resetFilters}
-        className="bg-gray-200 px-3 py-2 rounded-md shadow-md hover:bg-gray-300"
+        className="px-4 py-2 rounded-md bg-red-500 text-white font-semibold shadow-md hover:bg-red-600 transition self-baseline"
       >
-        Reset
+        Reset Filters
       </button>
     </div>
   );
